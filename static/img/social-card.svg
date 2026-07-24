@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1015"/><stop offset="1" stop-color="#14242b"/></linearGradient><pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity=".045"/></pattern></defs>
+  <rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#grid)"/><circle cx="990" cy="90" r="270" fill="#18b783" opacity=".12"/>
+  <text x="88" y="105" fill="#27e3a7" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">FIELD GUIDE</text>
+  <text x="88" y="250" fill="#f2f7f5" font-family="Arial, sans-serif" font-size="78" font-weight="700">AI Agent Engineering</text>
+  <text x="88" y="340" fill="#f2f7f5" font-family="Arial, sans-serif" font-size="78" font-weight="700">Fundamentals</text>
+  <text x="88" y="430" fill="#9fb0b5" font-family="Arial, sans-serif" font-size="31">Context · Skills · PRDs · Slices · Loops · Tests · Architecture</text>
+  <path d="M88 520H1112" stroke="#314148" stroke-width="2"/><text x="88" y="566" fill="#27e3a7" font-family="monospace" font-size="22" letter-spacing="3">ALIGN → SPECIFY → SLICE → EXECUTE → VERIFY</text>
+</svg>
