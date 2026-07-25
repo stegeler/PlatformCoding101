@@ -11,6 +11,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: pages-${{ github.ref }}
@@ -37,14 +38,34 @@ jobs:
         run: npm run build
 
       - name: Configure GitHub Pages
+        id: configure
         if: github.event_name != 'pull_request'
+        continue-on-error: true
         uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
+        id: upload
+        if: github.event_name != 'pull_request' && steps.configure.outcome == 'success'
+        continue-on-error: true
         uses: actions/upload-pages-artifact@v5
         with:
           path: build
+
+      - name: Report Pages configuration failure
+        if: github.event_name != 'pull_request' && steps.configure.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment 1 --body "Pages verification failed during repository configuration. GitHub Pages may not yet be enabled with **GitHub Actions** as its source."
+
+      - name: Report artifact upload failure
+        if: github.event_name != 'pull_request' && steps.configure.outcome == 'success' && steps.upload.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment 1 --body "Pages verification passed repository configuration, but failed while uploading the Docusaurus build artifact."
+
+      - name: Fail unsuccessful build stage
+        if: github.event_name != 'pull_request' && (steps.configure.outcome == 'failure' || steps.upload.outcome == 'failure')
+        run: exit 1
 
   deploy:
     name: Deploy site
@@ -57,4 +78,22 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v5
+
+      - name: Report successful deployment
+        if: steps.deployment.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: gh pr comment 1 --body "Pages deployment verified successfully: ${PAGE_URL}"
+
+      - name: Report deployment failure
+        if: steps.deployment.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment 1 --body "Pages verification reached the deployment stage, but GitHub rejected the deployment."
+
+      - name: Fail unsuccessful deployment
+        if: steps.deployment.outcome == 'failure'
+        run: exit 1
