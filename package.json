@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "description": "A practical field guide to AI-assisted software engineering fundamentals from Matt Pocock's workflow workshop.",
-  "type": "module",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
@@ -22,6 +21,10 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "3.10.1",
+    "@docusaurus/types": "3.10.1"
   },
   "engines": {
     "node": ">=20.0"
