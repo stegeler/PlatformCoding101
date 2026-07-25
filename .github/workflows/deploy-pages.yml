@@ -25,6 +25,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
+      - name: Report verification start
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: gh pr comment 1 --body "Pages verification started for commit ${COMMIT_SHA}."
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
@@ -50,6 +57,12 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: build
+
+      - name: Report successful artifact upload
+        if: github.event_name != 'pull_request' && steps.configure.outcome == 'success' && steps.upload.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment 1 --body "Pages repository configuration and Docusaurus artifact upload both succeeded. Deployment is the remaining stage."
 
       - name: Report Pages configuration failure
         if: github.event_name != 'pull_request' && steps.configure.outcome == 'failure'
