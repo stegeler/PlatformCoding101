@@ -1,5 +1,6 @@
 name: Build and deploy Docusaurus
 
+# Temporary PR synchronization trigger for the initial Pages deployment.
 on:
   push:
     branches: [master]
@@ -8,6 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: read
   pages: write
   id-token: write
@@ -18,6 +20,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dispatch-master-deployment:
+    name: Dispatch master deployment
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch the deployment workflow on master
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          gh api --method POST "repos/${REPOSITORY}/actions/workflows/deploy-pages.yml/dispatches" -f ref=master
+          gh pr comment "${PR_NUMBER}" --body "Dispatched the Pages deployment workflow on master."
+
   build:
     name: Build site
     runs-on: ubuntu-latest
