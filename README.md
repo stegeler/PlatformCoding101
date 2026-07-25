@@ -22,7 +22,7 @@ The workflow in `.github/workflows/deploy-pages.yml` builds pull requests and de
 
 - Site: `https://stegeler.github.io/PlatformCoding101/`
 - Node.js: 22
-- Docusaurus: 3.10.2
+- Docusaurus: 3.10.1
 
 ## Content structure
 
