@@ -1,5 +1,6 @@
 name: Build and deploy Docusaurus
 
+# Temporary PR synchronization trigger for the initial Pages deployment.
 on:
   push:
     branches: [master]
